@@ -54,5 +54,10 @@
 # OPTIONAL BUT RECOMMENDED
 # ============================================
 # Git (for version control)
-# FFmpeg (for advanced encoding features)
+
+# FFmpeg (for video encoding - optional but recommended)
+# Linux (Ubuntu/Debian): libavcodec-dev libavformat-dev libavutil-dev libavfilter-dev libavdevice-dev libswscale-dev libswresample-dev
+# Linux (Fedora/RHEL): ffmpeg-devel
+# Windows: Download from https://ffmpeg.org/download.html
+# macOS: brew install ffmpeg
 

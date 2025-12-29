@@ -101,6 +101,14 @@ check_system_deps_ubuntu() {
         "pkg-config"
     )
     
+    # Check for FFmpeg (optional but recommended)
+    if ! pkg-config --exists libavcodec libavformat libavutil 2>/dev/null; then
+        echo -e "${YELLOW}⚠${NC} FFmpeg not found (optional - needed for video encoding)"
+        echo -e "   Install with: sudo apt-get install -y libavcodec-dev libavformat-dev libavutil-dev"
+    else
+        echo -e "${GREEN}✓${NC} FFmpeg development libraries found"
+    fi
+    
     for dep in "${DEPS[@]}"; do
         if ! dpkg -l | grep -q "^ii  $dep "; then
             MISSING_DEPS+=("$dep")
@@ -130,6 +138,18 @@ install_system_deps_ubuntu() {
         libayatana-appindicator3-dev \
         librsvg2-dev \
         pkg-config
+    
+    # Install FFmpeg development libraries (optional but recommended)
+    echo -e "${YELLOW}Installing FFmpeg development libraries (optional)...${NC}"
+    sudo apt-get install -y \
+        libavcodec-dev \
+        libavformat-dev \
+        libavutil-dev \
+        libavfilter-dev \
+        libavdevice-dev \
+        libswscale-dev \
+        libswresample-dev || echo -e "${YELLOW}⚠${NC} FFmpeg installation skipped (optional)"
+    
     echo -e "${GREEN}✓${NC} System dependencies installed successfully"
 }
 
@@ -150,6 +170,14 @@ check_system_deps_fedora() {
         "librsvg2-devel"
         "pkg-config"
     )
+    
+    # Check for FFmpeg (optional but recommended)
+    if ! pkg-config --exists libavcodec libavformat libavutil 2>/dev/null; then
+        echo -e "${YELLOW}⚠${NC} FFmpeg not found (optional - needed for video encoding)"
+        echo -e "   Install with: sudo dnf install -y ffmpeg-devel"
+    else
+        echo -e "${GREEN}✓${NC} FFmpeg development libraries found"
+    fi
     
     for dep in "${DEPS[@]}"; do
         if ! rpm -q "$dep" >/dev/null 2>&1; then
@@ -181,6 +209,11 @@ install_system_deps_fedora() {
         libappindicator-gtk3-devel \
         librsvg2-devel \
         pkg-config
+    
+    # Install FFmpeg development libraries (optional but recommended)
+    echo -e "${YELLOW}Installing FFmpeg development libraries (optional)...${NC}"
+    sudo dnf install -y ffmpeg-devel || echo -e "${YELLOW}⚠${NC} FFmpeg installation skipped (optional)"
+    
     echo -e "${GREEN}✓${NC} System dependencies installed successfully"
 }
 

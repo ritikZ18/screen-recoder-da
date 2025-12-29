@@ -124,7 +124,6 @@ impl SessionManager {
         let capture_arc = Arc::new(Mutex::new(capture));
         let encoder_arc = Arc::new(Mutex::new(encoder));
         let analytics_arc = Arc::new(Mutex::new(analytics));
-        let state_arc = Arc::new(Mutex::new(RecordingState::Recording));
         let metrics_arc = self.system_metrics.clone();
 
         self.capture_source = Some(capture_arc.clone());
