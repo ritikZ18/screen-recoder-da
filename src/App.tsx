@@ -49,8 +49,25 @@ function App() {
   useEffect(() => {
     if (!isTauri) return;
     
+    // Sync recording status on mount
+    const syncStatus = async () => {
+      try {
+        const status = await invoke<any>("get_recording_status");
+        console.log("Synced recording status:", status);
+        setRecordingState({
+          isRecording: status.is_recording || false,
+          isPaused: status.is_paused || false,
+          duration: status.duration || 0,
+        });
+      } catch (error) {
+        console.error("Failed to sync recording status:", error);
+      }
+    };
+    
+    syncStatus();
+    
     // Listen for recording events
-    const unlisten = listen("recording-update", (event) => {
+    const unlistenPromise = listen("recording-update", (event) => {
       const data = event.payload as any;
       console.log("Recording state update:", data);
       setRecordingState({
@@ -70,10 +87,15 @@ function App() {
       if (data.is_recording && data.duration === 0) {
         console.log("Recording started!");
       }
+    }).catch((error) => {
+      console.warn("Failed to listen to recording-update events:", error);
+      // If events fail, periodically poll status instead
+      const pollInterval = setInterval(syncStatus, 1000);
+      return () => clearInterval(pollInterval);
     });
 
     // Listen for metrics updates
-    const unlistenMetrics = listen("metrics-update", (event) => {
+    const unlistenMetricsPromise = listen("metrics-update", (event) => {
       const data = event.payload as any;
       setMetrics({
         captureFps: data.capture_fps || 0,
@@ -83,11 +105,13 @@ function App() {
         cpuUsage: data.cpu_usage || 0,
         memoryUsage: data.memory_usage || 0,
       });
+    }).catch((error) => {
+      console.warn("Failed to listen to metrics-update events:", error);
     });
 
     return () => {
-      unlisten.then((fn) => fn());
-      unlistenMetrics.then((fn) => fn());
+      unlistenPromise.then((fn) => fn && fn()).catch(() => {});
+      unlistenMetricsPromise.then((fn) => fn && fn()).catch(() => {});
     };
   }, [isTauri]);
 
@@ -107,10 +131,30 @@ function App() {
         monitorId: selectedMonitor,
         windowId: selectedWindow,
       });
+      // Optimistically update UI state even if events fail
+      setRecordingState(prev => ({
+        ...prev,
+        isRecording: true,
+        isPaused: false,
+        duration: 0,
+      }));
     } catch (error) {
       console.error("Failed to start recording:", error);
       const errorMsg = error instanceof Error ? error.message : String(error);
-      if (errorMsg.includes("not implemented") || errorMsg.includes("not supported")) {
+      if (errorMsg.includes("already in progress")) {
+        // Try to sync status to fix stuck state
+        try {
+          const status = await invoke<any>("get_recording_status");
+          setRecordingState({
+            isRecording: status.is_recording || false,
+            isPaused: status.is_paused || false,
+            duration: status.duration || 0,
+          });
+        } catch (syncError) {
+          console.error("Failed to sync status:", syncError);
+        }
+        alert(`Recording is already in progress. Use the Stop button to end it first.`);
+      } else if (errorMsg.includes("not implemented") || errorMsg.includes("not supported")) {
         alert(`Screen capture is not yet supported on Linux. Windows support is available.`);
       } else {
         alert(`Failed to start recording: ${errorMsg}`);

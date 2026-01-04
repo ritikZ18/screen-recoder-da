@@ -172,7 +172,7 @@ impl SessionManager {
         Ok(())
     }
 
-    pub async fn stop_recording(&mut self) -> Result<String> {
+    pub async fn stop_recording(&mut self, app: Option<AppHandle>) -> Result<String> {
         let current_state = *self.state.lock().await;
         if current_state == RecordingState::Stopped {
             return Err(anyhow::anyhow!("No recording in progress").into());
@@ -215,6 +215,19 @@ impl SessionManager {
             .unwrap_or("")
             .to_string();
 
+        // Emit stopped event with output path
+        if let Some(app) = app {
+            let _ = app.emit(
+                "recording-update",
+                serde_json::json!({
+                    "is_recording": false,
+                    "is_paused": false,
+                    "duration": 0.0,
+                    "output_path": output.clone(),
+                }),
+            );
+        }
+
         self.start_time = None;
         *self.paused_duration.lock().await = Duration::ZERO;
 
@@ -236,6 +249,22 @@ impl SessionManager {
             }
             RecordingState::Stopped => Err(anyhow::anyhow!("No recording in progress").into()),
         }
+    }
+
+    pub async fn get_recording_status(&self) -> Result<serde_json::Value, String> {
+        let state = *self.state.lock().await;
+        let duration = if let Some(start) = self.start_time {
+            let paused_dur = *self.paused_duration.lock().await;
+            (start.elapsed().as_secs_f64() - paused_dur.as_secs_f64()).max(0.0)
+        } else {
+            0.0
+        };
+        
+        Ok(serde_json::json!({
+            "is_recording": state == RecordingState::Recording,
+            "is_paused": state == RecordingState::Paused,
+            "duration": duration,
+        }))
     }
 
     pub async fn get_timeline_data(&self) -> Result<Vec<Value>, String> {

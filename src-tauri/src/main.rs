@@ -65,6 +65,12 @@ async fn pause_recording(state: tauri::State<'_, AppState>) -> Result<(), String
 }
 
 #[tauri::command]
+async fn get_recording_status(state: tauri::State<'_, AppState>) -> Result<serde_json::Value, String> {
+    let manager = state.session_manager.lock().await;
+    manager.get_recording_status().await
+}
+
+#[tauri::command]
 async fn get_timeline_data(state: tauri::State<'_, AppState>) -> Result<Vec<serde_json::Value>, String> {
     let manager = state.session_manager.lock().await;
     manager.get_timeline_data().await
@@ -89,6 +95,7 @@ async fn main() {
             start_recording,
             stop_recording,
             pause_recording,
+            get_recording_status,
             get_timeline_data,
         ])
         .run(tauri::generate_context!())

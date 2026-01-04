@@ -26,31 +26,36 @@ function Timeline({ isRecording }: TimelineProps) {
   useEffect(() => {
     if (!isTauri) return;
     
-    const unlisten = listen("analytics-update", (event) => {
-      const data = event.payload as any;
-      setTimelineData((prev) => [
-        ...prev,
-        {
-          time: data.timestamp || 0,
-          colorDominance: data.color_dominance || 0,
-          brightness: data.brightness || 0,
-          audioLevel: data.audio_level || 0,
-          sceneChange: data.scene_change || false,
-        },
-      ]);
-    });
-
-    return () => {
-      unlisten.then((fn) => fn());
+    // Poll timeline data while recording
+    let pollInterval: NodeJS.Timeout | null = null;
+    
+    const pollTimelineData = async () => {
+      try {
+        const data = await invoke<TimelineData[]>("get_timeline_data");
+        if (data.length > 0) {
+          setTimelineData(data);
+        }
+      } catch (error) {
+        console.error("Failed to poll timeline data:", error);
+      }
     };
-  }, []);
-
-  useEffect(() => {
-    if (!isRecording) {
-      // Load saved timeline data when recording stops
+    
+    if (isRecording) {
+      // Poll every second while recording
+      pollInterval = setInterval(pollTimelineData, 1000);
+      pollTimelineData(); // Initial load
+    } else {
+      // Load once when recording stops
       loadTimelineData();
     }
-  }, [isRecording]);
+
+    return () => {
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+    };
+  }, [isRecording, isTauri]);
+
 
   const loadTimelineData = async () => {
     if (!isTauri) return;

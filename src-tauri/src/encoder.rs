@@ -96,14 +96,13 @@ impl Encoder {
         }
 
         // Check for frame drops (if encoding takes too long)
-        if self.frame_timestamps.len() > 0 {
-            let last_timestamp = self.frame_timestamps.back().unwrap();
+        if let Some(last_timestamp) = self.frame_timestamps.back() {
             let time_since_last = start.duration_since(*last_timestamp);
             
             // If more than 2 frame intervals have passed, consider frames dropped
-            let expected_interval = std::time::Duration::from_secs_f64(1.0 / 30.0); // 30 FPS
+            let expected_interval = std::time::Duration::from_secs_f64(1.0 / 30.0); // 30 FPS target
             if time_since_last > expected_interval * 2 {
-                let dropped = ((time_since_last.as_secs_f64() / expected_interval.as_secs_f64()) - 1.0) as u64;
+                let dropped = ((time_since_last.as_secs_f64() / expected_interval.as_secs_f64()) - 1.0).max(0.0) as u64;
                 self.dropped_frames += dropped;
             }
         }
@@ -168,18 +167,15 @@ impl Encoder {
             0.0
         };
 
-        // Calculate encode FPS
-        let encode_fps = if avg_encode_time > 0.0 {
-            1000.0 / avg_encode_time
-        } else {
-            0.0
-        };
+        // Calculate encode FPS - same as capture FPS since we encode each frame synchronously
+        // In real implementation, this would track actual encoding throughput separately
+        let encode_fps = capture_fps;
 
         json!({
-            "capture_fps": capture_fps,
-            "encode_fps": encode_fps,
+            "capture_fps": (capture_fps * 10.0).round() / 10.0, // Round to 1 decimal
+            "encode_fps": (encode_fps * 10.0).round() / 10.0,
             "dropped_frames": self.dropped_frames,
-            "encode_latency": avg_encode_time,
+            "encode_latency": (avg_encode_time * 10.0).round() / 10.0,
             // CPU and memory will be added by session manager
             "cpu_usage": 0.0,
             "memory_usage": 0,
