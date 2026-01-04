@@ -19,14 +19,20 @@ struct AppState {
 
 #[tauri::command]
 async fn list_monitors(state: tauri::State<'_, AppState>) -> Result<Vec<serde_json::Value>, String> {
+    tracing::info!("list_monitors command called");
     let manager = state.session_manager.lock().await;
-    manager.list_monitors().await
+    let result = manager.list_monitors().await;
+    tracing::info!("list_monitors result: {:?}", result);
+    result
 }
 
 #[tauri::command]
 async fn list_windows(state: tauri::State<'_, AppState>) -> Result<Vec<serde_json::Value>, String> {
+    tracing::info!("list_windows command called");
     let manager = state.session_manager.lock().await;
-    manager.list_windows().await
+    let result = manager.list_windows().await;
+    tracing::info!("list_windows result: {:?}", result);
+    result
 }
 
 #[tauri::command]
@@ -44,9 +50,12 @@ async fn start_recording(
 }
 
 #[tauri::command]
-async fn stop_recording(state: tauri::State<'_, AppState>) -> Result<String, String> {
+async fn stop_recording(
+    state: tauri::State<'_, AppState>,
+    app: tauri::AppHandle,
+) -> Result<String, String> {
     let mut manager = state.session_manager.lock().await;
-    manager.stop_recording().await.map_err(|e| e.to_string())
+    manager.stop_recording(Some(app)).await.map_err(|e| e.to_string())
 }
 
 #[tauri::command]

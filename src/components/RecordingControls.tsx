@@ -35,6 +35,15 @@ function RecordingControls({
             {isPaused ? "⏸ PAUSED" : "● REC"}
           </div>
         )}
+        {!isRecording && duration === 0 && (
+          <div style={{ 
+            fontSize: '0.875rem', 
+            color: '#a0a0a0', 
+            marginTop: '0.5rem' 
+          }}>
+            Ready to record
+          </div>
+        )}
       </div>
 
       <div className="controls">
@@ -45,10 +54,10 @@ function RecordingControls({
         ) : (
           <>
             <button className="pause-btn" onClick={onPause}>
-              {isPaused ? "Resume" : "Pause"}
+              {isPaused ? "▶ Resume" : "⏸ Pause"}
             </button>
             <button className="stop-btn" onClick={onStop}>
-              Stop
+              ⏹ Stop Recording
             </button>
           </>
         )}

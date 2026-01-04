@@ -31,13 +31,37 @@
   grid-template-columns: 400px 1fr;
   gap: 2rem;
   padding: 2rem;
+  min-height: calc(100vh - 200px);
   height: calc(100vh - 200px);
+  overflow: hidden;
 }
 
 .left-panel {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.5rem;
+}
+
+/* Scrollbar styling for left panel */
+.left-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.left-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.left-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.left-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .right-panel {
@@ -45,11 +69,37 @@
   border-radius: 12px;
   padding: 1.5rem;
   overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling for right panel */
+.right-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.right-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.right-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.right-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 1024px) {
   .app-main {
     grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100vh - 200px);
+  }
+  
+  .left-panel {
+    max-height: 50vh;
   }
 }
 

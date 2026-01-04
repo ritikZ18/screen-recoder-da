@@ -2,6 +2,10 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 1.5rem;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .timer {
@@ -34,6 +38,11 @@
 .controls {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  min-width: 120px;
 }
 
 .controls button {

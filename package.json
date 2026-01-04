@@ -6,13 +6,16 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "cross-env LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri",
+    "tauri:dev": "./cleanup-port.sh && LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri dev",
+    "tauri:build": "LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri build",
+    "cleanup": "./cleanup-port.sh"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "@tauri-apps/api": "^2.0.0",
     "@tauri-apps/plugin-shell": "^2.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "recharts": "^2.10.3"
   },
   "devDependencies": {
@@ -20,8 +23,8 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
+    "cross-env": "^10.1.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }
 }
-

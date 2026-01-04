@@ -127,15 +127,37 @@ npm install
 npm install -g @tauri-apps/cli@next
 ```
 
-## Building
+## Running the Desktop App
+
+### ⚠️ Important: This is a Desktop App!
+
+**DO NOT** run `npm run dev` - that's just the web frontend and Tauri APIs won't work.
+
+### Development Mode (Desktop Window)
 
 ```bash
-# Development mode
+# Run the desktop app
 npm run tauri dev
+```
 
-# Production build
+This will:
+- ✅ Open a **desktop window** (not a browser)
+- ✅ Enable Tauri APIs (recording will work)
+- ✅ Hot-reload for frontend changes
+
+### Production Build
+
+```bash
+# Build the desktop application
 npm run tauri build
 ```
+
+**Output**:
+- Windows: `src-tauri/target/release/bundle/msi/screen-recorder_*.msi`
+- Linux: `src-tauri/target/release/bundle/deb/screen-recorder_*.deb`
+- macOS: `src-tauri/target/release/bundle/dmg/screen-recorder_*.dmg`
+
+See `DESKTOP_APP_GUIDE.md` for detailed instructions.
 
 ## Project Structure
 

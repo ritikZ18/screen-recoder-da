@@ -1,0 +1,40 @@
+═══════════════════════════════════════════════════════════════
+  HOW TO ACCESS YOUR PROJECT FROM WINDOWS
+═══════════════════════════════════════════════════════════════
+
+You're in WSL (Linux), but need to build/run on Windows?
+
+📍 ACCESS YOUR PROJECT FROM WINDOWS:
+
+1. Open Windows File Explorer (Win + E)
+2. In address bar, type:
+   \\wsl$\Ubuntu\home\swamizero\screen-recorder
+
+3. Or use PowerShell:
+   cd \\wsl$\Ubuntu\home\swamizero\screen-recorder
+
+🔨 BUILD FOR WINDOWS:
+
+1. Open Windows PowerShell (NOT WSL terminal)
+2. Navigate to project:
+   cd \\wsl$\Ubuntu\home\swamizero\screen-recorder
+
+3. Build:
+   npm install
+   npm run tauri build
+
+📁 FIND YOUR .EXE:
+
+After building, the Windows executable will be at:
+src-tauri\target\release\screen-recorder.exe
+
+Double-click it to run!
+
+📦 OR INSTALL:
+
+The installer will be at:
+src-tauri\target\release\bundle\msi\Screen Recorder_1.0.0_x64_en-US.msi
+
+Double-click to install like any Windows app!
+
+═══════════════════════════════════════════════════════════════

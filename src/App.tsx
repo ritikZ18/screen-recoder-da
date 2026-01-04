@@ -7,6 +7,9 @@ import Timeline from "./components/Timeline";
 import MetricsPanel from "./components/MetricsPanel";
 import "./App.css";
 
+// Check if running in Tauri
+const isTauri = typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
+
 interface RecordingState {
   isRecording: boolean;
   isPaused: boolean;
@@ -23,6 +26,8 @@ interface Metrics {
 }
 
 function App() {
+  console.log("App.tsx: Component rendering, isTauri:", typeof window !== "undefined" && "__TAURI_INTERNALS__" in window);
+  
   const [recordingState, setRecordingState] = useState<RecordingState>({
     isRecording: false,
     isPaused: false,
@@ -38,16 +43,33 @@ function App() {
   });
   const [selectedMonitor, setSelectedMonitor] = useState<string | null>(null);
   const [selectedWindow, setSelectedWindow] = useState<string | null>(null);
+  
+  console.log("App.tsx: State initialized");
 
   useEffect(() => {
+    if (!isTauri) return;
+    
     // Listen for recording events
     const unlisten = listen("recording-update", (event) => {
       const data = event.payload as any;
+      console.log("Recording state update:", data);
       setRecordingState({
         isRecording: data.is_recording || false,
         isPaused: data.is_paused || false,
         duration: data.duration || 0,
       });
+      
+      // Show notification when recording stops with file path
+      if (data.output_path && !data.is_recording) {
+        const path = data.output_path as string;
+        alert(`Recording saved to:\n${path}`);
+        console.log("Recording saved to:", path);
+      }
+      
+      // Show notification when recording starts
+      if (data.is_recording && data.duration === 0) {
+        console.log("Recording started!");
+      }
     });
 
     // Listen for metrics updates
@@ -67,9 +89,19 @@ function App() {
       unlisten.then((fn) => fn());
       unlistenMetrics.then((fn) => fn());
     };
-  }, []);
+  }, [isTauri]);
 
   const handleStartRecording = async () => {
+    if (!isTauri) {
+      alert("This app must be run as a desktop application. Use 'npm run tauri dev' to start the desktop app.");
+      return;
+    }
+    
+    if (!selectedMonitor && !selectedWindow) {
+      alert("Please select a monitor or window to record.");
+      return;
+    }
+    
     try {
       await invoke("start_recording", {
         monitorId: selectedMonitor,
@@ -77,30 +109,60 @@ function App() {
       });
     } catch (error) {
       console.error("Failed to start recording:", error);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      if (errorMsg.includes("not implemented") || errorMsg.includes("not supported")) {
+        alert(`Screen capture is not yet supported on Linux. Windows support is available.`);
+      } else {
+        alert(`Failed to start recording: ${errorMsg}`);
+      }
     }
   };
 
   const handleStopRecording = async () => {
+    if (!isTauri) {
+      alert("This app must be run as a desktop application.");
+      return;
+    }
     try {
       await invoke("stop_recording");
     } catch (error) {
       console.error("Failed to stop recording:", error);
+      alert(`Failed to stop recording: ${error}`);
     }
   };
 
   const handlePauseRecording = async () => {
+    if (!isTauri) {
+      alert("This app must be run as a desktop application.");
+      return;
+    }
     try {
       await invoke("pause_recording");
     } catch (error) {
       console.error("Failed to pause recording:", error);
+      alert(`Failed to pause recording: ${error}`);
     }
   };
 
+  console.log("App.tsx: About to render JSX");
+  
   return (
-    <div className="app">
+    <div className="app" style={{ minHeight: "100vh", backgroundColor: "#1e1e2e" }}>
       <header className="app-header">
         <h1>Screen Recorder</h1>
         <p className="subtitle">Professional Desktop Recording with Analytics</p>
+        {!isTauri && (
+          <div style={{ 
+            background: "#ff4444", 
+            color: "white", 
+            padding: "10px", 
+            marginTop: "10px", 
+            borderRadius: "5px" 
+          }}>
+            ⚠️ Running in web mode. Tauri APIs are not available. 
+            Run <code>npm run tauri dev</code> for the desktop app.
+          </div>
+        )}
       </header>
 
       <main className="app-main">

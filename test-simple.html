@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Screen Recorder</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            color: #e0e0e0;
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #667eea;
+        }
+        .status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Screen Recorder - Test Page</h1>
+    <div class="status">
+        <p><strong>If you see this page, Tauri is loading content correctly!</strong></p>
+        <p>This is a simple HTML test without React.</p>
+    </div>
+    <div class="status">
+        <p><strong>Window Info:</strong></p>
+        <p>User Agent: <span id="ua"></span></p>
+        <p>Tauri Available: <span id="tauri"></span></p>
+        <p>Console: Open DevTools (F12) to check for errors</p>
+    </div>
+    <script>
+        document.getElementById('ua').textContent = navigator.userAgent;
+        document.getElementById('tauri').textContent = 
+            (typeof window !== "undefined" && "__TAURI_INTERNALS__" in window) ? "Yes ✓" : "No ✗";
+        console.log("Test page loaded successfully!");
+        console.log("Window object:", window);
+        console.log("Tauri available:", typeof window !== "undefined" && "__TAURI_INTERNALS__" in window);
+    </script>
+</body>
+</html>
+

@@ -1,7 +1,4 @@
-use opentelemetry::metrics::MeterProvider as _;
 use opentelemetry::KeyValue;
-use opentelemetry_prometheus::PrometheusExporterBuilder;
-use opentelemetry_sdk::metrics::SdkMeterProvider;
 use opentelemetry_sdk::Resource;
 use prometheus::Encoder as PrometheusEncoder;
 use prometheus::TextEncoder;
@@ -24,14 +21,17 @@ pub fn init() -> Result<(), Box<dyn std::error::Error>> {
 
     // Initialize Prometheus metrics
     let exporter = opentelemetry_prometheus::exporter()
-        .with_resource(Resource::new(vec![KeyValue::new(
-            "service.name",
-            "screen-recorder",
-        )]))
         .build()?;
 
-    let provider = SdkMeterProvider::builder()
+    let resource = Resource::new(vec![KeyValue::new(
+        "service.name",
+        "screen-recorder",
+    )]);
+
+    use opentelemetry_sdk::metrics::MeterProvider;
+    let provider = MeterProvider::builder()
         .with_reader(exporter)
+        .with_resource(resource)
         .build();
 
     opentelemetry::global::set_meter_provider(provider);
@@ -59,7 +59,7 @@ pub fn record_event(event_name: &str, attributes: &[(&str, &str)]) {
 }
 
 pub async fn get_metrics() -> Result<String, Box<dyn std::error::Error>> {
-    let guard = METRICS_EXPORTER.lock().await;
+    let guard: tokio::sync::MutexGuard<'_, Option<Arc<prometheus::Registry>>> = METRICS_EXPORTER.lock().await;
     if let Some(registry) = guard.as_ref() {
         let encoder = TextEncoder::new();
         let metric_families = registry.gather();

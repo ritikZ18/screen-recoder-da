@@ -1,9 +1,7 @@
 use crate::capture::Frame;
-use anyhow::{Context, Result};
+use anyhow::Result;
 use serde_json::json;
 use std::path::PathBuf;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 use std::time::Instant;
 use std::collections::VecDeque;
 

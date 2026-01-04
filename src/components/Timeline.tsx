@@ -4,6 +4,9 @@ import { listen } from "@tauri-apps/api/event";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import "./Timeline.css";
 
+// Check if running in Tauri
+const isTauri = typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
+
 interface TimelineProps {
   duration: number;
   isRecording: boolean;
@@ -17,10 +20,12 @@ interface TimelineData {
   sceneChange: boolean;
 }
 
-function Timeline({ duration, isRecording }: TimelineProps) {
+function Timeline({ isRecording }: TimelineProps) {
   const [timelineData, setTimelineData] = useState<TimelineData[]>([]);
 
   useEffect(() => {
+    if (!isTauri) return;
+    
     const unlisten = listen("analytics-update", (event) => {
       const data = event.payload as any;
       setTimelineData((prev) => [
@@ -48,6 +53,7 @@ function Timeline({ duration, isRecording }: TimelineProps) {
   }, [isRecording]);
 
   const loadTimelineData = async () => {
+    if (!isTauri) return;
     try {
       const data = await invoke<TimelineData[]>("get_timeline_data");
       setTimelineData(data);

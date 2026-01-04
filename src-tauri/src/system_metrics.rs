@@ -1,6 +1,6 @@
 use serde_json::json;
 use std::sync::Arc;
-use sysinfo::{System, Cpu, Pid, Process};
+use sysinfo::{System, Pid};
 use tokio::sync::Mutex;
 use tokio::time::{Duration, Instant};
 
@@ -23,7 +23,7 @@ impl SystemMetrics {
     }
 
     pub async fn get_metrics(&self) -> serde_json::Value {
-        let mut system = self.system.lock().await;
+        let mut system: tokio::sync::MutexGuard<'_, System> = self.system.lock().await;
         let mut last_update = self.last_update.lock().await;
 
         // Refresh every 500ms to avoid excessive CPU usage
@@ -44,7 +44,7 @@ impl SystemMetrics {
             // Global CPU usage - average across all CPUs
             let cpus = system.cpus();
             if !cpus.is_empty() {
-                let total: f32 = cpus.iter().map(|cpu| cpu.cpu_usage()).sum();
+                let total: f32 = cpus.iter().map(|cpu: &sysinfo::Cpu| cpu.cpu_usage()).sum();
                 (total / cpus.len() as f32) as f64
             } else {
                 0.0

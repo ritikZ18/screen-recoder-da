@@ -24,17 +24,24 @@ npm install
 
 ## Development
 
+### ⚠️ Important: Run the Desktop App, Not Web App!
+
 ```bash
-# Start development server
+# Start the DESKTOP app (correct way)
 npm run tauri dev
 ```
+
+**DO NOT** run `npm run dev` - that's just the web frontend and Tauri APIs won't work!
 
 This will:
 1. Start the Vite dev server (frontend)
 2. Build the Rust backend
-3. Launch the Tauri app
+3. Launch a **desktop window** (not a browser)
+4. Enable Tauri APIs (recording buttons will work)
 
-**Note**: The app will launch but recording won't work until Windows capture is implemented. The UI is fully functional for testing.
+**Expected Result**: A desktop window opens with the app UI.
+
+**Note**: The app will launch but recording won't work until Windows capture is fully implemented. The UI is fully functional for testing.
 
 ## Building
 

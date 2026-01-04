@@ -7,7 +7,7 @@ use anyhow::{Context, Result};
 use serde_json::Value;
 use std::path::PathBuf;
 use std::sync::Arc;
-use tauri::AppHandle;
+use tauri::{AppHandle, Emitter};
 use tokio::sync::Mutex;
 use tokio::time::{Duration, Instant};
 
@@ -21,7 +21,7 @@ pub enum RecordingState {
 
 pub struct SessionManager {
     state: Arc<Mutex<RecordingState>>,
-    capture_source: Option<Arc<Mutex<Box<dyn CaptureTrait>>>>,
+    capture_source: Option<Arc<Mutex<crate::capture::Capture>>>,
     encoder: Option<Arc<Mutex<Encoder>>>,
     analytics: Option<Arc<Mutex<AnalyticsPipeline>>>,
     system_metrics: Arc<SystemMetrics>,
@@ -248,7 +248,7 @@ impl SessionManager {
     }
 
     async fn capture_loop_task(
-        capture: Arc<Mutex<Box<dyn CaptureTrait>>>,
+        capture: Arc<Mutex<crate::capture::Capture>>,
         encoder: Arc<Mutex<Encoder>>,
         analytics: Arc<Mutex<AnalyticsPipeline>>,
         state: Arc<Mutex<RecordingState>>,

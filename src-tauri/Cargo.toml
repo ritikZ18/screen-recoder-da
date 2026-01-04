@@ -19,6 +19,35 @@ tokio = { version = "1", features = ["full"] }
 anyhow = "1.0"
 thiserror = "1.0"
 
+# Observability
+opentelemetry = { version = "0.21", features = ["metrics"] }
+opentelemetry_sdk = { version = "0.21", features = ["metrics"] }
+opentelemetry_prometheus = { package = "opentelemetry-prometheus", version = "0.14" }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+prometheus = "0.13"
+
+# Image processing for analytics
+image = "0.25"
+rayon = "1.8"
+
+# Audio processing
+hound = "3.5"
+
+# Async trait
+async-trait = "0.1"
+
+# Directories
+dirs = "6.0"
+
+# Chrono for timestamps
+chrono = "0.4"
+
+# System metrics
+sysinfo = "0.30"
+
+# Audio processing for analytics
+rubato = "0.14"
 
 # FFmpeg bindings (optional - requires system FFmpeg installation)
 # Uncomment when FFmpeg is installed on the system
@@ -37,34 +66,4 @@ windows = { version = "0.58", features = [
     "Win32_UI",
     "Win32_UI_WindowsAndMessaging",
 ] }
-
-# Observability
-opentelemetry = "0.23"
-opentelemetry_sdk = "0.23"
-opentelemetry_prometheus = { package = "opentelemetry-prometheus", version = "0.14" }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
-prometheus = "0.13"
-
-# Image processing for analytics
-image = "0.25"
-rayon = "1.8"
-
-# Audio processing
-hound = "3.5"
-
-# Async trait
-async-trait = "0.1"
-
-# Directories
-dirs = "5.0"
-
-# Chrono for timestamps
-chrono = "0.4"
-
-# System metrics
-sysinfo = "0.30"
-
-# Audio processing for analytics
-rubato = "0.14"
 

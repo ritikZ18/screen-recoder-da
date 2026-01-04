@@ -1,7 +1,6 @@
 use crate::capture::Frame;
 use anyhow::Result;
-use image::{DynamicImage, RgbImage};
-use rayon::prelude::*;
+use image::RgbImage;
 use serde_json::{json, Value};
 use std::collections::VecDeque;
 use std::path::PathBuf;
@@ -69,11 +68,13 @@ impl AnalyticsPipeline {
             let mut total_brightness = 0u64;
             let pixel_count = (frame.width * frame.height) as u64;
 
-            for pixel in img.pixels() {
+            let rgb_img: &RgbImage = &img;
+            for pixel in rgb_img.pixels() {
+                let [r, g, b] = pixel.0;
                 // Calculate brightness (luminance)
-                let brightness = (0.299 * pixel[0] as f64
-                    + 0.587 * pixel[1] as f64
-                    + 0.114 * pixel[2] as f64) as u8;
+                let brightness = (0.299 * r as f64
+                    + 0.587 * g as f64
+                    + 0.114 * b as f64) as u8;
                 histogram[brightness as usize] += 1;
                 total_brightness += brightness as u64;
             }
@@ -112,7 +113,7 @@ impl AnalyticsPipeline {
             let diff: f64 = current_hist
                 .iter()
                 .zip(last_hist.iter())
-                .map(|(a, b)| (a - b).abs() as f64)
+                .map(|(a, b)| (*a as i32 - *b as i32).abs() as f64)
                 .sum();
 
             let threshold = (frame.width * frame.height) as f64 * 0.1; // 10% change threshold
@@ -131,10 +132,12 @@ impl AnalyticsPipeline {
         let img_result = RgbImage::from_raw(frame.width, frame.height, frame.data.clone());
 
         if let Some(img) = img_result {
-            for pixel in img.pixels() {
-                let brightness = (0.299 * pixel[0] as f64
-                    + 0.587 * pixel[1] as f64
-                    + 0.114 * pixel[2] as f64) as u8;
+            let rgb_img: &image::RgbImage = &img;
+            for pixel in rgb_img.pixels() {
+                let [r, g, b] = pixel.0;
+                let brightness = (0.299 * r as f64
+                    + 0.587 * g as f64
+                    + 0.114 * b as f64) as u8;
                 histogram[brightness as usize] += 1;
             }
         }
@@ -152,10 +155,12 @@ impl AnalyticsPipeline {
         let img_result = RgbImage::from_raw(width, height, data.to_vec());
 
         if let Some(img) = img_result {
-            for pixel in img.pixels() {
-                let brightness = (0.299 * pixel[0] as f64
-                    + 0.587 * pixel[1] as f64
-                    + 0.114 * pixel[2] as f64) as u8;
+            let rgb_img: &image::RgbImage = &img;
+            for pixel in rgb_img.pixels() {
+                let [r, g, b] = pixel.0;
+                let brightness = (0.299 * r as f64
+                    + 0.587 * g as f64
+                    + 0.114 * b as f64) as u8;
                 histogram[brightness as usize] += 1;
             }
         }
@@ -232,11 +237,12 @@ impl AnalyticsPipeline {
         if let Some(img) = img_result {
             let mut total = 0u64;
             let count = (frame.width * frame.height) as u64;
-            
-            for pixel in img.pixels() {
-                let brightness = (0.299 * pixel[0] as f64
-                    + 0.587 * pixel[1] as f64
-                    + 0.114 * pixel[2] as f64) as u64;
+            let rgb_img: &image::RgbImage = &img;
+            for pixel in rgb_img.pixels() {
+                let [r, g, b] = pixel.0;
+                let brightness = (0.299 * r as f64
+                    + 0.587 * g as f64
+                    + 0.114 * b as f64) as u64;
                 total += brightness;
             }
             
@@ -256,11 +262,12 @@ impl AnalyticsPipeline {
         if let Some(img) = img_result {
             let mut total = 0u64;
             let count = (width * height) as u64;
-            
-            for pixel in img.pixels() {
-                let brightness = (0.299 * pixel[0] as f64
-                    + 0.587 * pixel[1] as f64
-                    + 0.114 * pixel[2] as f64) as u64;
+            let rgb_img: &image::RgbImage = &img;
+            for pixel in rgb_img.pixels() {
+                let [r, g, b] = pixel.0;
+                let brightness = (0.299 * r as f64
+                    + 0.587 * g as f64
+                    + 0.114 * b as f64) as u64;
                 total += brightness;
             }
             
