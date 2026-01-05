@@ -265,6 +265,14 @@ This is a showcase project demonstrating:
 
 MIT
 
+## Screenshots : 
+1. <img width="3200" height="1904" alt="image" src="https://github.com/user-attachments/assets/e3258490-9c9a-4dd3-b468-0ac7bfa773e8" />
+2. <img width="3200" height="1904" alt="Screenshot 2026-01-05 085753" src="https://github.com/user-attachments/assets/573f8466-af16-4162-8d13-4c8848f23c55" />
+3. <img width="3200" height="1904" alt="Screenshot 2026-01-05 085806" src="https://github.com/user-attachments/assets/499ce6bd-6875-4a9a-8ab0-d0596d6a05ac" />
+
+## Analysed Files ( Observability ) : 
+1. [Uploading recording_20260105_085807.meta.json…]()
+
 ## Resume Bullets
 
 * "Built a cross-platform desktop screen recorder using **native capture APIs** (Windows Graphics Capture / ScreenCaptureKit / PipeWire) and **FFmpeg**, supporting multi-monitor and multi-track audio."
