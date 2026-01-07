@@ -47,9 +47,11 @@ npm run tauri dev
 → Run: `rm -f src-tauri/Cargo.lock && cargo clean`
 
 ### "Still getting errors"
-→ Run: `./verify_build.sh` to check all fixes are applied
+→ Run: `./scripts/verify_build.sh` to check all fixes are applied
 
 ---
 
 **All code issues are fixed. Just need correct Rust version in your PATH!**
+
+
 

@@ -2,7 +2,7 @@
 
 ## Issues Fixed
 
-### 1. PowerShell Script (`build-windows.ps1`) - Encoding/Emoji Problem
+### 1. PowerShell Script (`scripts/build-windows.ps1`) - Encoding/Emoji Problem
 **Problem:** Line 59 had an emoji character (`💡`) that was getting corrupted to `ðŸ'¡` when PowerShell read it, causing a "string missing terminator" error.
 
 **Fix:** Replaced all emoji characters with plain ASCII equivalents:
@@ -44,7 +44,7 @@ From Windows PowerShell (NOT WSL):
 cd \\wsl$\Ubuntu-22.04\home\swamizero\screen-recorder
 
 # Either script works:
-.\build-windows.ps1
+.\\scripts\\build-windows.ps1
 # OR
 .\build-windows.bat
 ```
@@ -54,4 +54,8 @@ Both will:
 2. Install npm dependencies
 3. Build the Windows executable
 4. Show you where to find the `.exe` and `.msi` files
+
+
+
+
 

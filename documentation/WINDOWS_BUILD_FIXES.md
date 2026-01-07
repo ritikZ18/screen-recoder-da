@@ -44,8 +44,12 @@ The Windows build was failing due to several Rust compilation errors in `src-tau
 
 2. **Or use the build script:**
    ```powershell
-   .\build-windows.ps1
+   .\\scripts\\build-windows.ps1
    ```
 
 The build should now complete without compilation errors.
+
+
+
+
 

@@ -136,7 +136,7 @@ npm install -g @tauri-apps/cli@next
 ### Development Mode (Desktop Window)
 
 ```bash
-# Run the desktop app
+# Run the desktop app : [if not, cd src-tauri ]
 npm run tauri dev
 ```
 

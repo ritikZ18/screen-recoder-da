@@ -102,7 +102,7 @@ npm run tauri:build
 npm run cleanup
 
 # Verify build setup
-./verify_build.sh
+./scripts/verify_build.sh
 ```
 
 ---
@@ -117,4 +117,6 @@ When running `npm run tauri:dev`:
 4. **Functionality:** Recording features work on Windows
 
 The app should **never** show a blank screen. If it does, check the terminal for errors!
+
+
 

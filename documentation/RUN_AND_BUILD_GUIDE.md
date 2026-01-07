@@ -29,8 +29,8 @@ Once the desktop window opens:
 
 ### Troubleshooting Running
 
-- **Port already in use**: The `tauri:dev` script automatically runs `cleanup-port.sh` before starting
-- **Rust compilation errors**: Run `./verify_build.sh` to check for issues
+- **Port already in use**: The `tauri:dev` script automatically runs `scripts/cleanup-port.sh` before starting
+- **Rust compilation errors**: Run `./scripts/verify_build.sh` to check for issues
 - **Dependencies missing**: Run `npm install` first
 
 ---
@@ -91,7 +91,7 @@ Once the desktop window opens:
    
    **Option A: PowerShell script (Recommended)**
    ```powershell
-   .\build-windows.ps1
+   .\\scripts\\build-windows.ps1
    ```
    Note: Fixed encoding issues - now uses plain ASCII for compatibility.
    
@@ -146,7 +146,7 @@ npm run tauri build
 cd \\wsl$\Ubuntu\home\swamizero\screen-recorder
 
 # Build (either script works - both are fixed!)
-.\build-windows.ps1
+.\\scripts\\build-windows.ps1
 # OR
 .\build-windows.bat
 # OR manually:
@@ -177,7 +177,11 @@ npm run tauri build
 
 ## Need Help?
 
-- **Build errors?** Run `./verify_build.sh` to check setup
+- **Build errors?** Run `./scripts/verify_build.sh` to check setup
 - **Windows build failing?** Ensure Visual C++ Build Tools are installed
 - **Can't access WSL files?** Copy project to Windows drive first
+
+
+
+
 

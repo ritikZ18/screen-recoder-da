@@ -57,7 +57,7 @@
 
 Run the verification script:
 ```bash
-./verify_build.sh
+./scripts/verify_build.sh
 ```
 
 Or manually:
@@ -101,5 +101,7 @@ cargo check
 ✅ **Structure verified**  
 ⚠️ **Rust version update required**
 
-After updating Rust, run `./verify_build.sh` to confirm all fixes are working.
+After updating Rust, run `./scripts/verify_build.sh` to confirm all fixes are working.
+
+
 
