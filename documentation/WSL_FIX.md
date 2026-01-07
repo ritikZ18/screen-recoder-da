@@ -28,7 +28,7 @@ The environment variable is set automatically in the npm script.
 You can also use the helper script:
 
 ```bash
-./run-tauri-dev.sh
+./scripts/run-tauri-dev.sh
 ```
 
 ### Manual override (if needed)
@@ -65,4 +65,6 @@ source ~/.bashrc
 ```
 
 But the package.json solution is better for project portability.
+
+
 

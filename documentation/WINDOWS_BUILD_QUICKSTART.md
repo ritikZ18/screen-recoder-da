@@ -45,7 +45,7 @@ src-tauri\target\release\bundle\msi\Screen Recorder_1.0.0_x64_en-US.msi
 
 ## ⚡ Even Faster: Use the Script
 
-1. Copy `build-windows.ps1` to Windows
+1. Copy `scripts/build-windows.ps1` to Windows
 2. Right-click → "Run with PowerShell"
 3. Done!
 
@@ -80,4 +80,7 @@ After building, you can:
 ---
 
 **Need help?** Check `BUILD_WINDOWS.md` for detailed instructions.
+
+
+
 

@@ -42,7 +42,7 @@ To actually test recording, you need to build on **Windows**:
 
 3. **Build for Windows:**
    ```powershell
-   .\build-windows.ps1
+   .\\scripts\\build-windows.ps1
    ```
    Or manually:
    ```powershell
@@ -103,7 +103,7 @@ npm run tauri:dev
 ```powershell
 # From Windows PowerShell:
 cd \\wsl$\Ubuntu-22.04\home\swamizero\screen-recorder
-.\build-windows.ps1
+.\\scripts\\build-windows.ps1
 ```
 
 ### Files Modified (Blank Screen Fix):
@@ -117,4 +117,8 @@ cd \\wsl$\Ubuntu-22.04\home\swamizero\screen-recorder
 ---
 
 **The app is ready!** You can now either explore the UI or build the Windows version to test recording.
+
+
+
+
 

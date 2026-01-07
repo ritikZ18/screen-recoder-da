@@ -58,7 +58,7 @@ npm install
 
 **Option A: Use the build script (Easiest)**
 ```powershell
-.\build-windows.ps1
+.\\scripts\\build-windows.ps1
 ```
 
 **Option B: Build manually**
@@ -189,4 +189,8 @@ The Linux version you built shows "No monitors found" because screen capture isn
 ---
 
 **Ready to build?** Open Windows PowerShell and follow the steps above! 🚀
+
+
+
+
 

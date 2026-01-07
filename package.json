@@ -7,9 +7,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "cross-env LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri",
-    "tauri:dev": "./cleanup-port.sh && LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri dev",
+    "tauri:dev": "./scripts/cleanup-port.sh && LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri dev",
     "tauri:build": "LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=llvmpipe tauri build",
-    "cleanup": "./cleanup-port.sh"
+    "cleanup": "./scripts/cleanup-port.sh"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.0",
@@ -28,3 +28,5 @@
     "vite": "^5.0.8"
   }
 }
+
+
